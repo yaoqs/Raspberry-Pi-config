@@ -50,3 +50,6 @@
 * 关于树莓派安装、配置、使用等的教程
 ## 树莓派通过网线直连笔记本电脑共享上网 .docx
 * 如题
+
+## [本作品采用知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议进行许可](http://creativecommons.org/licenses/by-nc-sa/2.5/cn/)
+## ![知识共享许可协议](https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png)
