@@ -54,3 +54,4 @@
 # License 许可证
 * [本作品采用知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议进行许可](http://creativecommons.org/licenses/by-nc-sa/2.5/cn/)
 * ![知识共享许可协议](https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png)
+* https://choosealicense.com/licenses/cc-by-sa-4.0/
