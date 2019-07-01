@@ -1,5 +1,6 @@
 # Raspberry-config
-关于树莓派安装、配置、使用等的技巧、工具
+关于树莓派安装、配置、使用等的技巧、工具 \
+About the skills and toolkits of installing, configuring raspbian and handbook for raspberry
 
 # 目录及说明
 ## boot
@@ -33,7 +34,7 @@
     * 可从网上查找安全下载地址，或使用本人提供的，亲测安全有效
     * [SD Card Formatter.rar](https://github.com/yaoqs/Raspberry-config/blob/master/toolkit/%E5%88%B7%E6%9C%BA/SD%20Card%20Formatter.rar) [SDCardFormatterv5_WinEN.zip](https://github.com/yaoqs/Raspberry-config/blob/master/toolkit/%E5%88%B7%E6%9C%BA/SDCardFormatterv5_WinEN.zip)
     * [usbit.zip](https://github.com/yaoqs/Raspberry-config/blob/master/toolkit/%E5%88%B7%E6%9C%BA/usbit.zip)
-    * [win32diskimager-v0.9-binary.zip](https://github.com/yaoqs/Raspberry-config/blob/master/toolkit/%E5%88%B7%E6%9C%BA/win32diskimager-v0.9-binary.zip)
+    * [win32diskimager.zip](https://github.com/yaoqs/Raspberry-config/blob/master/toolkit/%E5%88%B7%E6%9C%BA/win32diskimager-v0.9-binary.zip)
   * 调试终端
     * 建议官网下载
     * [FCN.zip 官网](https://github.com/boywhp/fcn)
