@@ -1,4 +1,4 @@
-# Raspberry-config
+# [Raspberry-config](https://yaoqs.github.io/Raspberry-config/)
 关于树莓派安装、配置、使用等的技巧、工具 \
 About the skills and toolkits of installing, configuring raspbian and handbook for raspberry
 
@@ -52,7 +52,7 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 ## 树莓派通过网线直连笔记本电脑共享上网 .docx
 * 如题
 
-# License 许可证
-* [本作品采用知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议进行许可](http://creativecommons.org/licenses/by-nc-sa/2.5/cn/)
-* ![知识共享许可协议](https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png)
-* https://choosealicense.com/licenses/cc-by-sa-4.0/
+# License 许可证 & Copyright
+* 版权声明：Copyright © 2019 要庆生. All rights reserved. 未经本人同意请勿转载。经本人同意后转载时请注明出处。
+* https://choosealicense.com/licenses/cc-by-sa-4.0/ ![](https://csdnimg.cn/release/phoenix/images/creativecommons/80x15.png)\
+知识共享许可协议 版权声明：署名，允许他人基于本文进行创作，且必须基于与原先许可协议相同的许可协议分发本文([Creative Commons](http://creativecommons.org/licenses/by-sa/4.0/ ))
