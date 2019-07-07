@@ -52,6 +52,9 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 ## 树莓派通过网线直连笔记本电脑共享上网 .docx
 * 如题
 
+## Python
+* [RPi.GPIO 0.6.5] https://pypi.org/project/RPi.GPIO/  pip install RPi.GPIO
+
 # License 许可证 & Copyright
 * 版权声明：Copyright © 2019 要庆生. All rights reserved. 未经本人同意请勿转载。经本人同意后转载时请注明出处。
 * https://choosealicense.com/licenses/cc-by-sa-4.0/ ![](https://csdnimg.cn/release/phoenix/images/creativecommons/80x15.png)\
