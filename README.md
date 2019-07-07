@@ -53,7 +53,10 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 * 如题
 
 ## Python
-* [RPi.GPIO 0.6.5] https://pypi.org/project/RPi.GPIO/  pip install RPi.GPIO
+* [RPi.GPIO 0.6.5](https://pypi.org/project/RPi.GPIO/)  
+ > ```python
+ > pip install RPi.GPIO
+ > ```
 
 # License 许可证 & Copyright
 * 版权声明：Copyright © 2019 要庆生. All rights reserved. 未经本人同意请勿转载。经本人同意后转载时请注明出处。
