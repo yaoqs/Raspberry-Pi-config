@@ -2,6 +2,8 @@
 关于树莓派安装、配置、使用等的技巧、工具 \
 About the skills and toolkits of installing, configuring raspbian and handbook for raspberry
 
+[toc]
+
 # 目录及说明
 ## boot
 * 参见boot目录下[README.md ](/boot/README.md)
@@ -57,6 +59,74 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
  > ```python
  > pip install RPi.GPIO
  > ```
+
+# 树莓派常用命令集合
+```
+ sudo apt-get update
+ sudo apt-get install vim
+ vim /etc/apt/sources.list
+ cd /etc/apt/
+ sudo vim /etc/apt/sources.list
+ sudo apt-get update
+ ping ustc.edu.cn
+ sudo passwd
+ reboot
+ sudo reboot
+ su root
+ sudo passwd pi
+ sudo apt-get install python-pip
+ sudo apt-get install fuse-utils ntfs-3g
+ modprobe fuse
+ sudo modprobe fuse
+ sudo vim /etc/fstab
+ sudo apt-get install exfat-fuse
+ sudo pip install bpython
+ sudo apt-get install python-dev
+ sudo pip install ipython
+ sudo apt-get install nmap
+ sudo apt-get upgrade
+ sudo pip install ipython
+ sudo pip install bpython
+ sudo pip install virtualenv
+ df
+ df -lh
+ fdisk -l
+ sudo fdisk -l
+ df -h
+ sudo fdisk /dev/mmcblk0
+ sudo reboot
+ sudo resize2fs /dev/mmcblk0p2 
+ df -h
+ sudo apt-get install -y dnsmasq
+ sudo vim /etc/dnsmasq.conf 
+ sudo service dnsmasq restart 
+ dig
+ sudo apt-get install dnsutils 
+ ls
+ dig www.baidu.com
+ sudo vim /etc/dnsmasq.conf 
+ sudo service dnsmasq restart 
+ dig www.baidu.com
+ sudo vim /etc/resolv.conf 
+ sudo service dnsmasq restart 
+ dig www.baidu.com
+ chkconfig dnsmapq on
+ find resolv.dnsmapq.conf
+ dig jd.com
+ sudo vim /etc/dnsmasq.conf 
+ netstat -lpnt
+ ps -ef
+ ifconfig
+ sudo service --status-all
+ service dnsmasq status
+ sudo apt-get install git
+ sudo easy_install -U distribute
+ python -V
+ sudo pip install rpi.gpio
+ alias ll='ls -lh'
+ source /etc/profile
+ sudo raspi-config
+```
 
 # License 许可证 & Copyright
 * 版权声明：Copyright © 2019 要庆生. All rights reserved. 未经本人同意请勿转载。经本人同意后转载时请注明出处。
