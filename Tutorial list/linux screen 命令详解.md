@@ -1,4 +1,4 @@
-# [linux screen 命令详解](https://www.cnblogs.com/mchina/archive/2013/01/30/2880680.html)
+# [linux screen 命令详解](https://www.cnblogs.com/mchina/archive/2013/01/30/2880680.html)(转载)
 
 **一、背景**
 
@@ -29,7 +29,7 @@ GNU's Screen 官方站点：http://www.gnu.org/software/screen/
 \# screen [-AmRvx -ls -wipe][-d <作业名称>][-h <行数>][-r <作业名称>][-s ][-S <作业名称>]
 
 **参数说明**
-
+```
 -A 　将所有的视窗都调整为目前终端机的大小。
 -d <作业名称> 　将指定的screen作业离线。
 -h <行数> 　指定视窗的缓冲区行数。
@@ -42,16 +42,17 @@ GNU's Screen 官方站点：http://www.gnu.org/software/screen/
 -x 　恢复之前离线的screen作业。
 -ls或--list 　显示目前所有的screen作业。
 -wipe 　检查目前所有的screen作业，并删除已经无法使用的screen作业。
-
+```
 **四、常用screen参数**
-
+```
 screen -S yourname -> 新建一个叫yourname的session
 screen -ls -> 列出当前所有的session
 screen -r yourname -> 回到yourname这个session
 screen -d yourname -> 远程detach某个session
 screen -d -r yourname -> 结束当前session并回到yourname这个session
-
+```
 **在每个screen session 下，所有命令都以 ctrl+a(C-a) 开始。**
+```
 C-a ? -> 显示所有键绑定信息
 C-a c -> 创建一个新的运行shell的窗口并切换到该窗口
 C-a n -> Next，切换到下一个 window 
@@ -77,7 +78,7 @@ C-a [ -> 进入 copy mode，在 copy mode 下可以回滚、搜索、复制就�
     Space 第一次按为标记区起点，第二次按为终点 
     Esc 结束 copy mode 
 C-a ] -> Paste，把刚刚在 copy mode 选定的内容贴上
-
+```
 **五、使用 screen**
 
 **5.1 安装screen**
