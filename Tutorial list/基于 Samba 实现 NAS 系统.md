@@ -2,9 +2,11 @@
 
 摆弄了几天Raspberry Pi，在搞定了无线网络、FTP服务之后，打算更进一步，通过Samba实现NAS系统与PC共享文件。
  需要安装的软件：
+```
  sudo apt-get install samba samba-common-bin
  sudo apt-get install netatalk （可选，用于支持AFP）
  sudo apt-get install avahi-daemon（可选，用于支持网内的计算机自动发现）
+ ```
  接下来就是配置了：
  [Samba 配置] /etc/samba/smb.conf 文件尾部增加
 
