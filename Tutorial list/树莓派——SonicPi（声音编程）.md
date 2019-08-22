@@ -8,7 +8,7 @@ Sonic Pi的执行的代码基于Ruby，这是一种漂亮又简洁的编程语�
 
 你可以在Raspbin系统的applications菜单的Education中找到Sonic Pi程序。打开这个程序，你将会看到类似下面的窗口：
 
-![\](http://www.2cto.com/uploadfile/Collfiles/20140923/201409230922226.png)
+![](http://www.2cto.com/uploadfile/Collfiles/20140923/201409230922226.png)
  这就是Sonic Pi的程序界面。窗口中主要包含三个部分。最大的部分是你写代码的地方，我们叫这里为编程面板。右上角的控制窗口为输出面板，这里会显示你的程序执行过程中的信息。右下方的窗口是错误面板，当你的代码中有错误的时候会在这里显示错误信息。
 
 # 2、MAKING SOUNDS（制作声音）
