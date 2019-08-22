@@ -129,7 +129,13 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 ```
 
 # website
-[树莓派实验室 | Raspberry Pi中文资讯站，提供丰富的树莓派使用教程和DIY资讯](http://shumeipai.nxez.com)
+* [树莓派实验室 | Raspberry Pi中文资讯站，提供丰富的树莓派使用教程和DIY资讯](http://shumeipai.nxez.com)
+* [NanoPi Embedded system for ARM SBC,Computer-on-Module and Custom Design]( http://www.nanopi.org/)
+![](http://www.nanopi.org/image/index/top_logo.gif)
+* [有哪些对树莓派的有趣改造和扩展应用？](https://www.zhihu.com/question/20697024)
+
+# [Tutorial list](https://github.com/yaoqs/Raspberry-config/tree/master/Tutorial%20list)
+个人收藏的raspberry pi/树莓派文章及教程
 
 # License 许可证 & Copyright
 * 版权声明：Copyright © 2019 要庆生. All rights reserved. 未经本人同意请勿转载。经本人同意后转载时请注明出处。
