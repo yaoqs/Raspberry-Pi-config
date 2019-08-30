@@ -47,3 +47,47 @@
 *	用树莓派搭建家庭NAS下载机.md
 *	让小米路由器变成一个聪明的WIFI(1)：有人回家，它就发短信告诉你.md 
 *	部署在树莓派上Kalid离线语音识别框架.md
+
+## [物联网 IoT 经验分享小站](https://blog.csdn.net/xukai871105/article/category/1436049/2)
+博文索引
+1. 【基础内容】
+  * 【[树莓派学前班——设置屏幕分辩率](http://blog.csdn.net/xukai871105/article/details/9003612)】
+  * 【[树莓派学习笔记——常用软件汇总](http://blog.csdn.net/xukai871105/article/details/20555979)】
+  * 【[树莓派学习笔记——USB wifi配置指南](http://blog.csdn.net/xukai871105/article/details/38170513)】
+  * 【[树莓派学习笔记——使用标准PC104键盘](http://blog.csdn.net/xukai871105/article/details/38374197)】
+  * 【[树莓派学习笔记——Model B Model B+ Compute Module Dev Kit的区别和联系](http://blog.csdn.net/xukai871105/article/details/38174465)】
+
+2. 【GPIO】
+  * 【[树莓派学习笔记——GPIO功能学习 ](http://blog.csdn.net/xukai871105/article/details/12684617)】
+  * 【[树莓派学习笔记——RPi.GPIO 流水灯](http://blog.csdn.net/xukai871105/article/details/22716677)】
+  * 【[树莓派学习笔记——Shell脚本操作GPIO](http://blog.csdn.net/xukai871105/article/details/18517729)】
+  * 【[树莓派学习笔记——使用文件IO操作GPIO SysFs方式](http://blog.csdn.net/xukai871105/article/details/38456801)】
+  * 【[树莓派学习笔记——wiringPi简介、安装和管脚说明](http://blog.csdn.net/xukai871105/article/details/17737005)】
+  * 【[树莓派学习笔记——wiringPi GPIO使用详解](http://blog.csdn.net/xukai871105/article/details/17881433)】
+
+3. 【I2C】
+  * 【[树莓派学习笔记——I2C设备载入和速率设置](http://blog.csdn.net/xukai871105/article/details/18234075) 】
+  * 【[树莓派学习笔记——I2C Tools 学习笔记](http://blog.csdn.net/xukai871105/article/details/15029843)】
+  * 【[树莓派学习笔记——Linux I2C驱动说明](http://blog.csdn.net/xukai871105/article/details/19841191) 】
+  * 【[树莓派学习笔记——I2C PCF8574 BCM2835 Library ](http://blog.csdn.net/xukai871105/article/details/14109211)】
+  * 【[树莓派学习笔记——I2C PCF8574 SysFs方式](http://blog.csdn.net/xukai871105/article/details/18273653) 】
+  * 【[树莓派学习笔记——I2C使用 PCF8574 Python SMBUS](http://blog.csdn.net/xukai871105/article/details/18450809) 】
+  * 【[树莓派学习笔记——wiringPi I2C设备使用详解](http://blog.csdn.net/xukai871105/article/details/18033945)】
+
+4. 【UART】
+  * 【[树莓派学习笔记——UART使用](http://blog.csdn.net/xukai871105/article/details/22713925) 】
+
+5. 【进阶内容】
+  * 【[树莓派学习笔记——yeelink 远程控制LED](http://blog.csdn.net/xukai871105/article/details/18624307)】
+  * 【[树莓派学习笔记——webiopi安装与入门](http://blog.csdn.net/xukai871105/article/details/20799551)】
+  * 【[树莓派学习笔记——webiopi配置文件说明](http://blog.csdn.net/xukai871105/article/details/21644741)】
+  * 【[树莓派学习笔记——webiopi网页控制LED](http://blog.csdn.net/xukai871105/article/details/22959675)】
+  * 【[树莓派学习笔记——实现modbus RTU从机 ](http://blog.csdn.net/xukai871105/article/details/22897401)】
+  * 【[树莓派学习笔记——Restful服务 采用slim php apache](http://blog.csdn.net/xukai871105/article/details/19763683)】
+  * 【[树莓派学习笔记——交叉编译工具链](http://blog.csdn.net/xukai871105/article/details/24932611)】
+  * 【[树莓派学习笔记——交叉编译练习之SQLite3安装](http://blog.csdn.net/xukai871105/article/details/37914679)
+  * 【[树莓派学习笔记——获取树莓派CPU温度](http://blog.csdn.net/xukai871105/article/details/38349209)】
+  * 【[树莓派学习笔记——定时向yeelink上传树莓派CPU温度](http://blog.csdn.net/xukai871105/article/details/38349519)】
+  * 【[树莓派学习笔记——SQLite操作简述](http://blog.csdn.net/xukai871105/article/details/38355623)】
+  * 【[树莓派学习笔记——Python SQLite插入温度记录](http://blog.csdn.net/xukai871105/article/details/38356755)】
+  * 【[树莓派学习笔记——Python SQLite查询历史温度](http://blog.csdn.net/xukai871105/article/details/38375729)】
