@@ -133,6 +133,10 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 * [NanoPi Embedded system for ARM SBC,Computer-on-Module and Custom Design]( http://www.nanopi.org/)
 ![](http://www.nanopi.org/image/index/top_logo.gif)
 * [有哪些对树莓派的有趣改造和扩展应用？](https://www.zhihu.com/question/20697024)
+* [raspbian release_notes.txt](http://downloads.raspberrypi.org/raspbian/release_notes.txt)
+* [中国石油大学 (华东) Linux 协会 树莓派](https://upclinux.github.io/intro/09/raspberry-pi/)
+* [Raspberry Pi用户指南 王伟 许金超 郭栋 梁黎颖 译 出版社：人民邮电出版社 出版日期：2013年8月  	ISBN：9787115323675](http://book.51cto.com/art/201312/420490.htm)
+* [树莓派 嵌入式以太网社区](http://www.embed-net.com/forum-64-1.html)
 
 # [Tutorial list](https://github.com/yaoqs/Raspberry-config/tree/master/Tutorial%20list)
 个人收藏的raspberry pi/树莓派文章及教程
