@@ -9,8 +9,6 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 * 参见boot目录下[README.md ](/boot/README.md)
 ## os
 * 参见os目录下[README.md ](/os/README.md)
-> 树莓派系统下载地址（Raspberry OS download URL)
-> [Download Page](https://www.raspberrypi.org/downloads/)
 ## toolkit
 * 参见toolkit目录下[README.md ](/toolkit/README.md)
 * menu
