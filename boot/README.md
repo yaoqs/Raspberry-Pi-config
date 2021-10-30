@@ -1,3 +1,134 @@
+# boot config introduction
+
+1. [raspberrypi.org > configuration](https://www.raspberrypi.org/documentation/configuration/)
+
+    Configuration
+
+    Some basic guides to configuring your Raspberry Pi.
+
+    Contents
+
+    + [raspi-config](https://www.raspberrypi.org/documentation/configuration/raspi-config.md)
+  
+        The Raspberry Pi configuration tool in Raspberry Pi OS, which allows you to easily enable features such as the camera, and to change your specific settings such as keyboard layout
+    + [config.txt](https://www.raspberrypi.org/documentation/configuration/config-txt/README.md)
+
+        The Raspberry Pi configuration file
+    + [TCP/IP networking](https://www.raspberrypi.org/documentation/configuration/tcpip/README.md)
+
+        Configuring the TCP/IP network stack on the Raspberry Pi
+    + [Connect to a wireless network](https://www.raspberrypi.org/documentation/configuration/wireless/README.md)
+
+        Configuring your Pi to connect to a wireless network using the Raspberry Pi 4, Raspberry Pi 3 or Pi Zero W's inbuilt wireless connectivity, or a USB wireless dongle
+    + [Wireless access point](https://www.raspberrypi.org/documentation/configuration/wireless/access-point-routed.md)
+
+        Configuring your Pi as a wireless access point using the Raspberry Pi 4, Raspberry Pi 3, or Raspberry Pi Zero W's inbuilt wireless connectivity, or a USB wireless dongle
+    + [Using a proxy](https://www.raspberrypi.org/documentation/configuration/use-a-proxy.md)
+
+        Setting up your Pi to access the internet via a proxy server
+    + [HDMI Config](https://www.raspberrypi.org/documentation/configuration/hdmi-config.md)
+
+        Setting up your HDMI device, including custom settings
+    + [Screen Configuration Editor](https://www.raspberrypi.org/documentation/configuration/arandr.md)
+
+        Setting up your display device's resolution, frequency and orientation using the provided graphical editor
+    + [Audio config](https://www.raspberrypi.org/documentation/configuration/audio-config.md)
+
+        Switching your audio output between HDMI and the 3.5mm jack
+    + [Camera config](https://www.raspberrypi.org/documentation/configuration/camera.md)
+
+        Installing and setting up the Raspberry Pi camera board
+    + [External storage config](https://www.raspberrypi.org/documentation/configuration/external-storage.md)
+
+        Mounting and setting up external storage on a Raspberry Pi
+    + [Localisation](https://www.raspberrypi.org/documentation/configuration/localisation.md)
+
+        Setting up your Pi to work in your local language and time zone
+    + [Default pin configuration](https://www.raspberrypi.org/documentation/configuration/pin-configuration.md)
+
+        Changing the default pin states.
+    + [Device Trees config](https://www.raspberrypi.org/documentation/configuration/device-tree.md)
+
+        Device Trees, overlays, and parameters
+    + [Kernel command line](https://www.raspberrypi.org/documentation/configuration/cmdline-txt.md)
+
+        Setting options in the kernel command line
+    + [UART configuration](https://www.raspberrypi.org/documentation/configuration/uart.md)
+
+        Setting up the on-board UARTs
+    + [Firmware warning icons](https://www.raspberrypi.org/documentation/configuration/warning-icons.md)
+
+        Description of warning icons displayed if the firmware detects issues
+    + [LED warning flash codes](https://www.raspberrypi.org/documentation/configuration/led_blink_warnings.md)
+
+        Description of LED warning flashes that are shown if a Pi fails to boot or has to shut down
+    + [Securing your Raspberry Pi](https://www.raspberrypi.org/documentation/configuration/security.md)
+
+        Some basic advice for making your Raspberry Pi more secure
+    + [Screensaver](https://www.raspberrypi.org/documentation/configuration/screensaver.md)
+
+        Configuring the screen saver and screen blanking
+    + [The boot folder](https://www.raspberrypi.org/documentation/configuration/boot_folder.md)
+
+        What it's for and what's in it
+    + [Network File System (NFS)](https://www.raspberrypi.org/documentation/configuration/nfs.md)
+
+        How to set up a NFS and connect clients to it
+
+2. [Raspberry-Pi-config](https://yaoqs.github.io/Raspberry-Pi-config/)
+3. [raspberrypi issues in stackexchange](https://raspberrypi.stackexchange.com/)
+4. 树莓派 cmdline.txt 内核参数命令
+   + console：定义串行控制台，通常有两项：
+     + console=serial0,115200
+     + console=tty1
+   + root：定义根文件系统的位置，例如root=/dev/mmcblk0p2表示多媒体卡块0分区2。
+   + rootfstype：定义rootfs使用的文件系统类型，例如rootfstype=ext4
+   + elevator：指定要使用的I/O调度程序。elevator=deadline意味着内核对所有I/O操作施加一个截止日期，以防止请求耗尽。
+   + quiet：将默认内核日志级别设置为KERN_WARNING，这将在引导期间抑制除非常严重的日志消息之外的所有日志消息。
+   + splash:告诉引导程序通过Plymouth模块使用splash screen。
+   + plymouth.ignore_serial_console
+   + dwc_otg.lpm_enable:在dwc_otg (On the Go)驱动程序中关闭LPM。
+   + dwc_otg.speed:设置USB属性的速度。dwc_otg.speed=1将设置为USBv1.0 speed。
+   + smsc95xx.turbo_mode:启用/禁用有线网络驱动程序涡轮模式。smsc95xx.turbo_mode=N关闭涡轮模式。
+   + usbhid.mousepoll:指定鼠标轮询间隔。如果您遇到无线鼠标速度慢或不稳定的问题，将其设置为0可能会有所帮助:usbhid.mousepoll=0。
+   + ...
+  
+5. [RPi cmdline.txt](https://elinux.org/RPi_cmdline.txt)
+
+   This file is for passing arguments to the Linux kernel and it can be found in /boot/
+
++ Default options:
+  + dwc_otg.lpm_enable=0
+  + console=ttyAMA0,115200
+  + kgdboc=ttyAMA0,115200
+  + console=tty1
+  + root=/dev/mmcblk0p2
+  + rootfstype=ext4
+  + elevator=deadline
+  + rootwait
++ Some common options:
+  + dwc_otg.speed=1
+
+        USB v1 speed
+
+  + smsc95xx.turbo_mode=N
+
+        if the raspberrypi freezes after filling the log withe kevent dropped.
+
+  + smsc95xx.macaddr=B8:27:EB:59:EB:25
+
+        it will override the default mac adress with the specified one.
+
+  + dwc_otg.microframe_schedule=1
+  + console=ttyAMA0,115200
+  + usbhid.mousepoll=8
+  + ip=192.168.0.10
+
+        static ip (as seen here)
+
+  + more
+
+# boot config operation/操作
 * 将本目录下文件放在/boot目录下
    * cmdline.txt 文件为系统初始化配置参数，根据需要修改相关参数，可在开头添加ip=192.168.173.1 来设置eth0以太网静态地址
    * [config.txt](https://www.raspberrypi.org/documentation/configuration/config-txt/README.md) 文件为树莓派参数配置文件，可根据需要修改相关参数，使其适配主板电流、显示器等
