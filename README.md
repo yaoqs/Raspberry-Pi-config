@@ -1,6 +1,6 @@
 # [Raspberry-config](https://yaoqs.github.io/Raspberry-config/)
-<a id="markdown-raspberry-config" name="raspberry-config"></a>
 
+<a id="markdown-raspberry-config" name="raspberry-config"></a>
 
 关于树莓派安装、配置、使用等的技巧、工具 \
 About the skills and toolkits of installing, configuring raspbian and handbook for raspberry
@@ -12,6 +12,7 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
   - [update](#update)
     - [固件更新](#固件更新)
     - [EEPROM Boot Loader更新](#eeprom-boot-loader更新)
+    - [内核编译](#内核编译)
   - [boot](#boot)
     - [参见boot目录下README.md](#参见boot目录下readmemd)
     - [u盘启动](#u盘启动)
@@ -21,6 +22,8 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
     - [Raspbian 操作系统](#raspbian-操作系统)
     - [raspberrypi/linux](#raspberrypilinux)
     - [Windows 10 IoT 系统](#windows-10-iot-系统)
+  - [设置](#设置)
+  - [树莓派 GPIO 控制](#树莓派-gpio-控制)
   - [toolkit](#toolkit)
     - [\[树莓派通过网线直连笔记本电脑共享上网 .docx\](./树莓派通过网线直连笔记本电脑共享上网 .docx)](#树莓派通过网线直连笔记本电脑共享上网-docx树莓派通过网线直连笔记本电脑共享上网-docx)
   - [树莓派常用命令集合](#树莓派常用命令集合)
@@ -42,18 +45,17 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 
 <!-- /TOC -->
 
-
 ## Install
-<a id="markdown-install" name="install"></a>
 
+<a id="markdown-install" name="install"></a>
 
 现在树莓派提供全新的一键式安装方法：[imager](https://downloads.raspberrypi.org/imager/imager_latest.exe) 大大简化了开发人员的操作，提高了安装效率，降低了安装难度。[more...](https://www.raspberrypi.com/software/)
 
 ## update
+
 <a id="markdown-update" name="update"></a>
 
-
-```shell
+```sh
 getconf LONG_BIT        # 查看系统位数
 uname -a            # kernel 版本
 /opt/vc/bin/vcgencmd  version   # firmware版本
@@ -65,29 +67,83 @@ cat /etc/debian_version     # Debian版本编号
 ```
 
 ### 固件更新
+
 <a id="markdown-%E5%9B%BA%E4%BB%B6%E6%9B%B4%E6%96%B0" name="%E5%9B%BA%E4%BB%B6%E6%9B%B4%E6%96%B0"></a>
 
-
+```sh
 sudo rpi-update
+```
 
 ### EEPROM Boot Loader更新
+
 <a id="markdown-eeprom-boot-loader%E6%9B%B4%E6%96%B0" name="eeprom-boot-loader%E6%9B%B4%E6%96%B0"></a>
 
-
+```sh
 sudo apt-get install rpi-eeprom
 sudo rpi-eeprom-update -a
+```
+
+### 内核编译
+
+<a id="markdown-%E5%86%85%E6%A0%B8%E7%BC%96%E8%AF%91" name="%E5%86%85%E6%A0%B8%E7%BC%96%E8%AF%91"></a>
+
+- 获取升级所需源码 官方网址：<https://github.com/raspberrypi> 上面列出了树莓派所有的开源软件
+  - firmware：树莓派的交叉编译好的二进制内核、模块、库、bootloader
+  - linux：内核源码
+  - tools：编译内核和其他源码所需的工具——交叉编译器等
+  - 我们只需要以上三个文件即可，下面的工程可以了解一下
+    - documentation：树莓派离线帮助文档，教你如何使用、部署树莓派（树莓派官方使用教程）
+    - userland：arm 端用户空间的一些应用库的源码——vc 视频硬浮点、EGL、mmal、openVG 等
+    - hats：Hardware Attached on Top，树莓派 B+ 型板子的扩展板资料
+    - maynard：一个 gtk 写成的桌面环境
+    - scratch：一个简易、可视化编程环境
+    - noobs：一个树莓派镜像管理工具，他可以让你在一个树莓派上部署多个镜像
+    - weston：一个应用程序
+    - target_fs：树莓派最小文件系统，使用 busybox 制作quake3：雷神之锤 3 有线开发源码 firmwareb
+  - 下载
+
+```sh
+mkdir raspeberrypi_src
+cd raspberrypi_src
+git clone git://github.com/raspberrypi/firmware.git
+git clone git://github.com/raspberrypi/linux.git
+git clone git://github.com/raspberrypi/tools.git
+```
+
+- 编译、提取内核及其模块
+  - 获得内核配置文件 在运行的树莓派中运行```$ls /proc/```
+    - 可看到一个叫 config.gz 的文件，他是当前的树莓派配置选项记录文件，我们将他拷出，放入我们的内核源码目录树下。```$cp /proc/config /home/pi```
+    - 我们这里使用前面交过的 samba 拷出并拷入内核源码目录下。在 linux 内核源码下执行：```$zcat config.gz > .config```
+    - 把树莓派的配置文件写入.config。
+  - 配置、编译内核
+    - 修改内核源码 makefile ARCH 类型和编译器路径```$vi Makefile +195```
+    - 查看、修改配置选项```$make menuconfig```
+    - 编译内核镜像$make在arch/arm/boot目录下可以看到一个叫zImage的文件，就是我们新的内核，但是树莓派需要另外一种格式的镜像，需要进行处理一下，执行以下命令：```cd tools/mkimage``` ```./imagetool-uncompressed.py ../../linux/arch/arm/boot/zImage```
+    - 即可在当前文件夹下看到一个叫kernel.img的文件，就是我们需要的新内核了。提取 modules 上一步其实不但编译出来了内核的源码，一些模块文件也编译出来了，这里我们提取一下，即可在 modules 得到我们需要的模块文件。
+
+```sh
+cd raspberrypi_src
+mkdir modules
+cd linux
+make modules_install INSTALL_MOD_PATH=../modules
+```
+
+    - 升级 RPi 的 kernel、Firmware、lib
+      - 升级内核，将新编好的内核拷入 SD 卡，改名为：kernel_new.img。打开 boot 目录下,找到config.txt文件，加入：kernel=kernel_new.img这一行。
+      - 升级 boot，将firmware/boot/目录下文件拷入 SD 卡 boot 目录：fbootcode.bin fixup.dat fixup_cd.dat start.elf
+      - 更新 vc 库及内核 modules，将编译出来的modules/lib/modules拷入树莓派文件系统/lib下
 
 ## boot
+
 <a id="markdown-boot" name="boot"></a>
 
-
 ### 参见boot目录下[README.md](/boot/README.md)
+
 <a id="markdown-%E5%8F%82%E8%A7%81boot%E7%9B%AE%E5%BD%95%E4%B8%8Breadme.md" name="%E5%8F%82%E8%A7%81boot%E7%9B%AE%E5%BD%95%E4%B8%8Breadme.md"></a>
 
-
 ### u盘启动
-<a id="markdown-u%E7%9B%98%E5%90%AF%E5%8A%A8" name="u%E7%9B%98%E5%90%AF%E5%8A%A8"></a>
 
+<a id="markdown-u%E7%9B%98%E5%90%AF%E5%8A%A8" name="u%E7%9B%98%E5%90%AF%E5%8A%A8"></a>
 
 在树莓派3从u盘启动之前，需要从设置了使能usb boot mode的sd启动。该设置树莓派芯片上的OTP（一次性可编程内存），这将使得树莓派能够从usb设备启动。一旦设置了该选项，sd卡就不需要了。注意，OTP一旦做出任何改动，都不能复原。
 
@@ -111,8 +167,8 @@ $ vcgencmd otp_dump | grep 17:
 之后，你可以在sd卡的config.txt末尾去掉program_usb_boot_mode=1这行代码，这样把这张sd用在其他树莓派上就不会设置OTP，注意，config.txt文件结尾不能有空行，你可以使用sudo nano /boot/config.txt命令使用nano 编辑器编辑config.txt文件。
 
 ## os/操作系统
-<a id="markdown-os%2F%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" name="os%2F%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"></a>
 
+<a id="markdown-os%2F%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" name="os%2F%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"></a>
 
 树莓派官方的操作系统是Raspberry Pi OS:
 
@@ -131,19 +187,19 @@ $ vcgencmd otp_dump | grep 17:
 这个版本不带图形化桌面系统，则只有命令行界面(这才是真正的Linux OS的真面目:-)，如果你不需要图形化界面，或者你的设备是Raspberry Pi zero(w,h)等硬件配置比较低（CPU慢，内存小，SD卡特别小）的推荐安装这个版本。
 
 ### [安装respbian.docx](./安装respbian.docx)
+
 <a id="markdown-%E5%AE%89%E8%A3%85respbian.docx" name="%E5%AE%89%E8%A3%85respbian.docx"></a>
 
-
 ### kali in raspberry pi
-<a id="markdown-kali-in-raspberry-pi" name="kali-in-raspberry-pi"></a>
 
+<a id="markdown-kali-in-raspberry-pi" name="kali-in-raspberry-pi"></a>
 
 1. [How to Install Kali Linux on Raspberry Pi? (Complete Guide)](https://raspberrytips.com/use-kali-linux-raspberry-pi/)
 2. [How to install Kali Linux on a USB for the RaspberryPi?](https://raspberrypi.stackexchange.com/questions/106762/how-to-install-kali-linux-on-a-usb-for-the-raspberrypi)
 
 ### Raspbian 操作系统
-<a id="markdown-raspbian-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" name="raspbian-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"></a>
 
+<a id="markdown-raspbian-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" name="raspbian-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"></a>
 
 树莓派官方提供了 **Raspbian** 操作系统，一款基于 [Debian](https://www.iplaysoft.com/debian.html) 优化修改而来的 Linux 发行版，也是最常用的一个版本，专为树莓派而生，通用性强。
 
@@ -165,14 +221,14 @@ $ vcgencmd otp_dump | grep 17:
 你几乎完全可以将树莓派 4 当做一台完整的台式电脑来使用，而得益于性能的大幅提升，本次升级后，树莓派的应用范围将会又得到了扩展。
 
 ### raspberrypi/linux
-<a id="markdown-raspberrypi%2Flinux" name="raspberrypi%2Flinux"></a>
 
+<a id="markdown-raspberrypi%2Flinux" name="raspberrypi%2Flinux"></a>
 
 [raspberrypi/linux](https://github.com/raspberrypi/linux) Kernel source tree for Raspberry Pi-provided kernel builds. Issues unrelated to the linux kernel should be posted on the community forum at <https://forums.raspberrypi.com/>
 
 ### Windows 10 IoT 系统
-<a id="markdown-windows-10-iot-%E7%B3%BB%E7%BB%9F" name="windows-10-iot-%E7%B3%BB%E7%BB%9F"></a>
 
+<a id="markdown-windows-10-iot-%E7%B3%BB%E7%BB%9F" name="windows-10-iot-%E7%B3%BB%E7%BB%9F"></a>
 
 除了 Linux 之外，[微软](https://www.iplaysoft.com/tag/%E5%BE%AE%E8%BD%AF)也已经跟树莓派基金会达成合作以确保 [Windows 10](https://www.iplaysoft.com/windows10.html) 可以适配树莓派新款产品，如今完美适配树莓派 2 / 3 代的 **Windows 10 IoT core 物联网核心版**系统已经「免费」提供给用户下载。截稿为止，4 代似乎还未适配。
 
@@ -180,9 +236,88 @@ $ vcgencmd otp_dump | grep 17:
 
 [下载 Win10 IoT 物联网系统 for 树莓派](https://www.iplaysoft.com/windows10-iot.html)
 
-## toolkit
-<a id="markdown-toolkit" name="toolkit"></a>
+## 设置
 
+<a id="markdown-%E8%AE%BE%E7%BD%AE" name="%E8%AE%BE%E7%BD%AE"></a>
+
+- Advanced Options 高级设置 （$ sudo raspi-config）
+  - A1 Overscan 是否让屏幕内容全屏显示
+  - A2 Hostname 在网上邻居或者路由器能看到的主机名称
+  - A3 Memory Split 内存分配，选择给 GPU 多少内存
+  - A4 SSH 是否运行 SSH 登录，建议开启此选项，以后操作 PI 方便，有网络就行，不用开屏幕了
+  - A5 SPI 是否默认启动 SPI 内核驱动，新手就不用管了
+  - A6 Audio 选择声音默认输出到模拟口还是 HDMI 口A7 Update 把 raspi-config 这个工具自动升级到最新版本
+- 树莓派网络与更新配置
+- 使用远程桌面
+  - 通过 Windows 自带的远程桌面软件，可以远程访问树莓派桌面应用 ```sudo apt-get install xrdp```
+- 使用 samba
+  - 通过 samba 服务，可以自由、访问修改树莓派家目录下的文件、代码。
+  - 首先安装 ```sambasudo apt-get install samba samba-common-bin```
+  - 然后修改配置文件```sudo vi /etc/samba/smb.conf```
+  - 重启 samba 服务```sudo /etc/init.d/samba restart```
+  - 把系统默认用户 pi 添加到 ```sambasudo smbpasswd -a pi```
+- 挂载 U 盘
+  - 当需要大容量外接存储设备时，可使用 U 盘挂载。通常我们在 /mnt 或 /media 目录下新建一个目录作为挂载点。比如：```sudo mkdir /mnt/udisk```
+  - 手动挂挂载：挂载命令：```sudo mount -o uid=pi,gid=pi /dev/sda1 /mnt/udisk```
+  - 用完之后卸载 ```sudo umount /mnt/1GB_USB_flash```
+  - 安装 exfat-fuse 软件之后 mount 就支持了。```sudo apt-get install exfat-fuse```
+  - 开机挂载 如果想开机自动挂载，而不是每次手工执行，可以编辑 /etc/fstab 文件。在末尾添加一行：```/dev/sda1 /mnt/udisk vfat rw,defaults 0 0``` 每次开机就会自动挂载。
+  - 热插挂载 需要希望想电脑一样，插上自动识别挂载在某一目录下，拔下自动 umount，请按一下操作 ```sudo vi /etc/udev/rules.d/10-usbstorage.rules```(此文件默认没有，需要新建).赋值以下内容即可，会自动在 /mnt/udisk 目录下挂载 U 盘。
+
+```
+KERNEL!="sd*", GOTO="media_by_label_auto_mount_end"
+SUBSYSTEM!="block",GOTO="media_by_label_auto_mount_end"
+IMPORT{program}="/sbin/blkid -o udev -p %N"
+ENV{ID_FS_TYPE}=="", GOTO="media_by_label_auto_mount_end"
+ENV{ID_FS_LABEL}!="", ENV{dir_name}="%E{ID_FS_LABEL}"
+ENV{ID_FS_LABEL}=="", ENV{dir_name}="Untitled-%k"
+ACTION=="add", ENV{mount_options}="relatime,sync"
+ACTION=="add", ENV{ID_FS_TYPE}=="vfat", ENV{mount_options}="iocharset=utf8,umaskk=000"
+ACTION=="add", ENV{ID_FS_TYPE}=="ntfs", ENV{mount_options}="iocharset=utf8,umaskk=000"
+ACTION=="add", RUN+="/bin/mkdir -p /mnt/udisk/", RUN+="/bin/mount -o $env{mount__options} /dev/%k /mnt/udisk/"
+
+ACTION=="remove", ENV{dir_name}!="", RUN+="/bin/umount -l /mnt/udisk/", RUN+="/bin/rmdir /mnt/udisk/"
+LABEL="media_by_label_auto_mount_end"
+```
+
+- 树莓派做 web 服务器
+  - 树莓派可以安装这个 LAMP 系列，但 Apache 和 MySql 对于树莓派这个小机器稍微有些太重了，主要是消耗内存多/速度慢/占用磁盘大 (约 200M)，所可以选择安装一个轻量级的 Web 服务器：nginx + php + sqlite
+  - 安装 nginx web 服务器 (约 6MB)```sudo apt-get install nginx```
+  - 启动 nginx ```sudo /etc/init.d/nginx start```nginx 的 www 根目录默认在/usr/share/nginx/www中
+  - 修改 nginx 的配置文件 ```sudo vi /etc/nginx/sites-available/default```
+  - PHP 脚本支持 找到 php 的定义段，将这些行的注释去掉 ，修改后内容如下
+
+```
+location ~ .php$ {
+　fastcgi_pass unix:/var/run/php5-fpm.sock;
+　fastcgi_index index.php;
+　include fastcgi_params;
+}
+```
+
+- 安装 php 和 sqlite (约 3MB) ```sudo apt-get install php5-fpm php5-sqlite```
+- 重新加载 nginx 的配置 ```sudo /etc/init.d/nginx reload```
+
+## 树莓派 GPIO 控制
+
+树莓派内核中已经编译自带了 gpio 的驱动，我们常通过一些第三方写好的库函数来完成具体的操作，比较常见的操作库函数有：
+
+- python GPIO
+  - 开发语言：python，树莓派的“Pi”就是由于最早的开发者希望在上面用Python 而起名的。
+  - 简单介绍：树莓派官方资料中推荐且容易上手，python GPIO 是一个小型的 python 库，可以帮助用户完成 raspberry 相关 IO 口操作，但是 python GPIO 库还没有支持 SPI、I2C 或者 1-wire 等总线接口。
+  - 官方网站： <https://code.google.com/p/raspberry-gpio-python/>
+- wiringPi
+  - 开发语言：C 语言
+  - 简单介绍：wiringPi 适合那些具有 C 语言基础，在接触树莓派之前已经接触过单片机或者嵌入式开发的人群。wiringPi 的 API 函数和 arduino 非常相似，这也使得它广受欢迎。作者给出了大量的说明和示例代码，这些示例代码也包括 UART 设备，I2C 设备和 SPI 设备等。
+  - 官方网站： <http://wiringpi.com/>
+- BCM2835 C Library
+  - 开发语言：C 语言
+  - 简单介绍：BCM2835 C Library 可以理解为使用 C 语言实现的相关底层驱动，BCM2835 C Library 的驱动库包括 GPIO、SPI 和 UART 等，可以通过学习 BCM2835 C Library 熟悉 BCM2835 相关的寄存器操作。如果有机会开发树莓派上的 linux 驱动，或自主开发 python 或 PHP 扩展驱动，可以从 BCM2835 C Library 找到不少的 “灵感”。
+  - 官方网站： <http://www.airspayce.com/mikem/bcm2835/>
+
+## toolkit
+
+<a id="markdown-toolkit" name="toolkit"></a>
 
 - ~~参见toolkit目录下[README.md](/toolkit/README.md)~~
 - menu
@@ -203,12 +338,12 @@ $ vcgencmd otp_dump | grep 17:
   - **nmap 功能强大的ip、端口扫描工具**
 
 ### [树莓派通过网线直连笔记本电脑共享上网 .docx](./树莓派通过网线直连笔记本电脑共享上网 .docx)
+
 <a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E7%9B%B4%E8%BF%9E%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91%E5%85%B1%E4%BA%AB%E4%B8%8A%E7%BD%91-.docx" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E7%9B%B4%E8%BF%9E%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91%E5%85%B1%E4%BA%AB%E4%B8%8A%E7%BD%91-.docx"></a>
 
-
 ## 树莓派常用命令集合
-<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88"></a>
 
+<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88"></a>
 
 ```bash
  sudo apt-get update
@@ -273,14 +408,14 @@ $ vcgencmd otp_dump | grep 17:
 ```
 
 ## [Tutorial list](https://github.com/yaoqs/Raspberry-config/tree/master/Tutorial%20list)
-<a id="markdown-tutorial-list" name="tutorial-list"></a>
 
+<a id="markdown-tutorial-list" name="tutorial-list"></a>
 
 个人收藏的raspberry pi/树莓派文章及教程
 
 ## 硬件
-<a id="markdown-%E7%A1%AC%E4%BB%B6" name="%E7%A1%AC%E4%BB%B6"></a>
 
+<a id="markdown-%E7%A1%AC%E4%BB%B6" name="%E7%A1%AC%E4%BB%B6"></a>
 
 - [Raspberry Pi PCIe Devices](https://pipci.jeffgeerling.com/)
 - [raspberry-pi-pcie-devices](https://github.com/geerlingguy/raspberry-pi-pcie-devices) Raspberry Pi PCI Express device compatibility database
@@ -290,14 +425,15 @@ $ vcgencmd otp_dump | grep 17:
 - [树莓派 使用C对GPIO编程](https://www.cnblogs.com/lxz365/articles/12831076.html)
 
 ## 集群/cluster
-<a id="markdown-%E9%9B%86%E7%BE%A4%2Fcluster" name="%E9%9B%86%E7%BE%A4%2Fcluster"></a>
 
+<a id="markdown-%E9%9B%86%E7%BE%A4%2Fcluster" name="%E9%9B%86%E7%BE%A4%2Fcluster"></a>
 
 - Linux 集群之美
 - [多角度展现 Linux 集群之美](https://blog.csdn.net/hzbooks/article/details/121882513)
 - [k3s-ansible](https://github.com/k3s-io/k3s-ansible) Build a Kubernetes cluster using k3s via Ansible,Author: <https://github.com/itwars>
 - [pi-cluster](https://github.com/geerlingguy/pi-cluster) Raspberry Pi Cluster automation
-- [raspberry-pi-dramble](https://github.com/geerlingguy/raspberry-pi-dramble) DEPRECATED - Raspberry Pi Kubernetes cluster that runs HA/HP Drupal 8;A cluster (Bramble) of Raspberry Pis on which Drupal is deployed using Ansible and Kubernetes. [pi-cluster](https://github.com/geerlingguy/pi-cluster) project for active development
+- [raspberry-pi-dramble](https://github.com/geerlingguy/raspberry-pi-dramble) ![](http://www.pidramble.com/themes/custom/pidramble/logo.svg) DEPRECATED - Raspberry Pi Kubernetes cluster that runs HA/HP Drupal 8;A cluster (Bramble) of Raspberry Pis on which Drupal is deployed using Ansible and Kubernetes. [pi-cluster](https://github.com/geerlingguy/pi-cluster) project for active development
+![](<http://www.pidramble.com/themes/custom/pidramble/images/raspberry-pi-dramble-hero-2019.jpg> 400*300)
 - [clusterhat-image](https://github.com/burtyb/clusterhat-image) Converts Raspbian/Raspberry Pi OS images to support Cluster HAT
 
 - [花式玩转Linux集群免密登录](https://juejin.cn/post/7086088679189381134)
@@ -308,14 +444,14 @@ $ vcgencmd otp_dump | grep 17:
 - [SMQTT](https://www.smqtt.cc/) 一款高性能&开源的MQTT服务器，支持单机、容器化、集群部署，支持多种协议，具备低延迟，高吞吐量，支持百万TCP连接。MQTT协议提供了一种使用发布/订阅模型执行消息传递的轻量级方法。这使得它适用于物联网消息传递，如低功耗传感器或手机、嵌入式计算机或微控制器等移动设备。SMQTTX是一个开源mqtt消息代理服务器，它实现了MQTT协议版本3.1.1和3.1。SMQTTX是轻量级，适用于从低功耗单板计算机到全服务器的所有设备。SMQTTX非常友好地支持快速配置，对于java应用可以非常容易完成二次开发，并且拥有高性能高吞吐量的mqtt服务
 
 ## 软件
-<a id="markdown-%E8%BD%AF%E4%BB%B6" name="%E8%BD%AF%E4%BB%B6"></a>
 
+<a id="markdown-%E8%BD%AF%E4%BB%B6" name="%E8%BD%AF%E4%BB%B6"></a>
 
 - [internet-pi](https://github.com/geerlingguy/internet-pi) A Raspberry Pi Configuration for Internet connectivity
 
 ### Python
-<a id="markdown-python" name="python"></a>
 
+<a id="markdown-python" name="python"></a>
 
 - [RPi.GPIO 0.6.5](https://pypi.org/project/RPi.GPIO/)
  >
@@ -324,8 +460,8 @@ $ vcgencmd otp_dump | grep 17:
  > ```
 
 ## 服务器管理
-<a id="markdown-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86" name="%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86"></a>
 
+<a id="markdown-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86" name="%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86"></a>
 
 - [iis7服务器管理工具](http://fwqglgj.iis7.net/) mstsc远程桌面、linux、ssh、sftp、vnc、ftp、webshell（批量管理），链接类客户端软件下载。
 - wol/wakeonlan
@@ -334,8 +470,8 @@ $ vcgencmd otp_dump | grep 17:
   - [wakemeonlan](https://www.nirsoft.net/utils/wake_on_lan.html)
 
 ## References
-<a id="markdown-references" name="references"></a>
 
+<a id="markdown-references" name="references"></a>
 
 - [树莓派实验室 | Raspberry Pi中文资讯站，提供丰富的树莓派使用教程和DIY资讯](http://shumeipai.nxez.com)
 - [NanoPi Embedded system for ARM SBC,Computer-on-Module and Custom Design]( http://www.nanopi.org/)
@@ -348,18 +484,19 @@ $ vcgencmd otp_dump | grep 17:
 - [自己制作树莓派3B+ 64位系统（编译内核+rootfs制作）](https://blog.csdn.net/m0_49475727/article/details/109247979)
 
 ## Recommendation
-<a id="markdown-recommendation" name="recommendation"></a>
 
+<a id="markdown-recommendation" name="recommendation"></a>
 
 - [Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/) official document
 - [blackout314/awesome-raspberry-pi](https://github.com/blackout314/awesome-raspberry-pi)
 
 ## News
+
 <a id="markdown-news" name="news"></a>
 
 ### [树莓派 4 代](https://www.iplaysoft.com/raspberrypi.html)- 全球最流行的 Linux 小型迷你电脑，性能大幅飙升！(支持4K / USB3.0)
-<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3--%E5%85%A8%E7%90%83%E6%9C%80%E6%B5%81%E8%A1%8C%E7%9A%84-linux-%E5%B0%8F%E5%9E%8B%E8%BF%B7%E4%BD%A0%E7%94%B5%E8%84%91%EF%BC%8C%E6%80%A7%E8%83%BD%E5%A4%A7%E5%B9%85%E9%A3%99%E5%8D%87%EF%BC%81%E6%94%AF%E6%8C%814k-%2F-usb3.0" name="%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3--%E5%85%A8%E7%90%83%E6%9C%80%E6%B5%81%E8%A1%8C%E7%9A%84-linux-%E5%B0%8F%E5%9E%8B%E8%BF%B7%E4%BD%A0%E7%94%B5%E8%84%91%EF%BC%8C%E6%80%A7%E8%83%BD%E5%A4%A7%E5%B9%85%E9%A3%99%E5%8D%87%EF%BC%81%E6%94%AF%E6%8C%814k-%2F-usb3.0"></a>
 
+<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3--%E5%85%A8%E7%90%83%E6%9C%80%E6%B5%81%E8%A1%8C%E7%9A%84-linux-%E5%B0%8F%E5%9E%8B%E8%BF%B7%E4%BD%A0%E7%94%B5%E8%84%91%EF%BC%8C%E6%80%A7%E8%83%BD%E5%A4%A7%E5%B9%85%E9%A3%99%E5%8D%87%EF%BC%81%E6%94%AF%E6%8C%814k-%2F-usb3.0" name="%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3--%E5%85%A8%E7%90%83%E6%9C%80%E6%B5%81%E8%A1%8C%E7%9A%84-linux-%E5%B0%8F%E5%9E%8B%E8%BF%B7%E4%BD%A0%E7%94%B5%E8%84%91%EF%BC%8C%E6%80%A7%E8%83%BD%E5%A4%A7%E5%B9%85%E9%A3%99%E5%8D%87%EF%BC%81%E6%94%AF%E6%8C%814k-%2F-usb3.0"></a>
 
 ![raspberrypi4_banner](_v_images/20190810214043362_22472.jpg)
 被誉为 “世界上最流行最便宜的小型电脑” 的「[树莓派](https://www.iplaysoft.com/go/raspberrypi)」**Raspberry Pi** 是一款性价比超高的迷你电脑主机 (仅有信用卡大小)，深受全球开发者、极客、技术爱好者们的追捧和喜爱。
@@ -367,8 +504,8 @@ $ vcgencmd otp_dump | grep 17:
 树莓派可以安装多种 [Linux](https://www.iplaysoft.com/os/linux-platform) 系统发行版 (官方为 [Debian](https://www.iplaysoft.com/debian.html) 的衍生版)，可当[服务器](https://www.iplaysoft.com/tag/%E6%9C%8D%E5%8A%A1%E5%99%A8)搭建各种网站、应用服务来使用，也能用来学习[编程](https://www.iplaysoft.com/tag/编程)、控制硬件或日常[办公](https://www.iplaysoft.com/tag/办公)。由于树莓派的体积很小很轻，并且功能极其丰富强大，这也使得它的应用范围和潜力几乎是无限的……
 
 ### 树莓派 4 代发布
-<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3%E5%8F%91%E5%B8%83" name="%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3%E5%8F%91%E5%B8%83"></a>
 
+<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3%E5%8F%91%E5%B8%83" name="%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E4%BB%A3%E5%8F%91%E5%B8%83"></a>
 
 如今 **Raspberry Pi 4** 「[树莓派 4 代](https://www.iplaysoft.com/go/raspberrypi)」终于正式发布了！！官方定价依然是 $35 美元起不变，但整体性能相比 3 代要提升了三倍之多！多媒体性能为四倍，即使同时外接两台 [4K](https://www.iplaysoft.com/tag/4k) 显示器双屏工作也毫无鸭梨。这么小的体积加上如此强劲的性能，这将是一款再次改变行业规则的产品。
 
@@ -377,8 +514,8 @@ $ vcgencmd otp_dump | grep 17:
 而且除了 [Linux](https://www.iplaysoft.com/os/linux-platform) 外，树莓派还能运行「[免费的 Win 10 物联网版系统](https://www.iplaysoft.com/windows10-iot.html)」！无论是[学习](https://www.iplaysoft.com/tag/%E5%AD%A6%E4%B9%A0)、办公、[编程](https://www.iplaysoft.com/tag/编程)、搭建智能家居、工控设备、还是用于特定的工作场景，树莓派都是最理想的小型电脑。也是每一个喜欢折腾电脑、折腾数码、折腾程序的朋友的必备玩物。
 
 ### 树莓派 4 硬件配置
-<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE" name="%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE"></a>
 
+<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE" name="%E6%A0%91%E8%8E%93%E6%B4%BE-4-%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE"></a>
 
 **树莓派四代** (Raspberry Pi 4 Model B) 在硬件方面迎来了巨大的[升级](https://www.iplaysoft.com/tag/升级)！首次搭载了 4GB 的内存 (1G / 2G / 4G 可选)，并且引入 **USB 3.0** 接口，同时支持双屏 4K 输出和 H.265 硬件解码；处理器搭载了博通 1.5GHz 的四核 ARM Cortex-A72 处理器，性能提升可谓是质的飞跃。
 
@@ -391,14 +528,14 @@ $ vcgencmd otp_dump | grep 17:
 新的**树莓派**几乎可兼容所有以往创建的树莓派项目、配件和应用。同时，其40针扩展 GPIO 接口使其能够添加更多传感器、连接器及扩展板或智能设备，前26针引脚与A型板和B型板保持一致，可 100% 向后兼容，无需担心软硬件和配件的生态问题。
 
 ### 树莓派官方宣传片
-<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%98%E6%96%B9%E5%AE%A3%E4%BC%A0%E7%89%87" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%98%E6%96%B9%E5%AE%A3%E4%BC%A0%E7%89%87"></a>
 
+<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%98%E6%96%B9%E5%AE%A3%E4%BC%A0%E7%89%87" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%98%E6%96%B9%E5%AE%A3%E4%BC%A0%E7%89%87"></a>
 
 如果你的[工作](https://www.iplaysoft.com/tag/工作)大多可以在 Linux 下完成的话，比如开发，或者用 [WPS for Linux](https://www.iplaysoft.com/wps-for-linux.html) 写文档、上网、收发邮件等，那么直接将树莓派随身携带，上下班通勤或出差时，也许会比带一个笨重的笔记本要轻松方便得多。
 
 ### 树莓派有什么作用和用途？
-<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%E5%92%8C%E7%94%A8%E9%80%94%EF%BC%9F" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%E5%92%8C%E7%94%A8%E9%80%94%EF%BC%9F"></a>
 
+<a id="markdown-%E6%A0%91%E8%8E%93%E6%B4%BE%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%E5%92%8C%E7%94%A8%E9%80%94%EF%BC%9F" name="%E6%A0%91%E8%8E%93%E6%B4%BE%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%E5%92%8C%E7%94%A8%E9%80%94%EF%BC%9F"></a>
 
 起初，树莓派是为鼓励孩子们学习[编程](https://www.iplaysoft.com/tag/%E7%BC%96%E7%A8%8B)和计算机知识而推出的奇趣硬件。但如今，除了教育领域，树莓派在硬件编程、智能家居、极客和计算机技术爱好者中的受欢迎程度完全超出想象。
 
@@ -412,9 +549,10 @@ $ vcgencmd otp_dump | grep 17:
 当然，这也是一个需要脑洞大开的硬件，你可以把它玩成[神器](https://www.iplaysoft.com/tag/神器)，也能让它积灰几尺厚，这需要有想象力或自身有确切的需求。
 
 ## License 许可证 & Copyright
+
 <a id="markdown-license-%E8%AE%B8%E5%8F%AF%E8%AF%81-%26-copyright" name="license-%E8%AE%B8%E5%8F%AF%E8%AF%81-%26-copyright"></a>
 
-
 - 版权声明：Copyright © 2019-2023 要庆生. All rights reserved. 未经本人同意请勿转载。经本人同意后转载时请注明出处。
-- <https://choosealicense.com/licenses/cc-by-sa-4.0/> ![](https://csdnimg.cn/release/phoenix/images/creativecommons/80x15.png)\
+- [![GitHub license](https://badgen.net/github/license/yaoqs/Raspberry-Pi-config)](https://github.com/yaoqs/Raspberry-Pi-config/blob/master/LICENSE) [![GitHub license](https://img.shields.io/github/license/yaoqs/Raspberry-Pi-config.svg)](https://github.com/yaoqs/Raspberry-Pi-config/blob/master/LICENSE)
 知识共享许可协议 版权声明：署名，允许他人基于本文进行创作，且必须基于与原先许可协议相同的许可协议分发本文([Creative Commons](http://creativecommons.org/licenses/by-sa/4.0/ ))
+- 业余时间所作，难免有不足及错漏之处，敬请包涵指正，可通过github仓库在线留言或Email <350788415@qq.com>告知；如需补充其他相关专业信息，亦可邮件通知或github仓库在线留言；同时欢迎各位热心人士star、fork或共同参与维护仓库
