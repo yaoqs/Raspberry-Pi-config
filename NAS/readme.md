@@ -46,7 +46,19 @@ curl 6.ipw.cn
 curl test.ipw.cn
 ```
 
-- Fail2Ban 是一款入侵防御软件，可以保护服务器免受暴力攻击。 它是用 Python 编程语言编写的。 Fail2Ban 基于auth 日志文件工作，默认情况下它会扫描所有 auth 日志文件，如 /var/log/auth.log、/var/log/apache/access.log 等，并禁止带有恶意标志的IP，比如密码失败太多，寻找漏洞等等标志。通常，Fail2Ban 用于更新防火墙规则，用于在指定的时间内拒绝 IP 地址。 它也会发送邮件通知。 Fail2Ban 为各种服务提供了许多过滤器，如 ssh、apache、nginx、squid、named、mysql、nagios 等。Fail2Ban 能够降低错误认证尝试的速度，但是它不能消除弱认证带来的风险。 这只是服务器防止暴力攻击的安全手段之一。
+### 挂载异常
+
+```sh
+sudo dmesg | grep usb
+umount -a
+fusermount -u path
+mount -a
+
+```
+
+### Fail2Ban
+
+Fail2Ban是一款入侵防御软件，可以保护服务器免受暴力攻击。 它是用 Python 编程语言编写的。 Fail2Ban 基于auth 日志文件工作，默认情况下它会扫描所有 auth 日志文件，如 /var/log/auth.log、/var/log/apache/access.log 等，并禁止带有恶意标志的IP，比如密码失败太多，寻找漏洞等等标志。通常，Fail2Ban 用于更新防火墙规则，用于在指定的时间内拒绝 IP 地址。 它也会发送邮件通知。 Fail2Ban 为各种服务提供了许多过滤器，如 ssh、apache、nginx、squid、named、mysql、nagios 等。Fail2Ban 能够降低错误认证尝试的速度，但是它不能消除弱认证带来的风险。 这只是服务器防止暴力攻击的安全手段之一。
 
 [如何使用 fail2ban 防御 SSH 服务器的暴力破解攻击](https://cloud.tencent.com/developer/article/1511129)
 
@@ -425,7 +437,7 @@ windows 客户端：<https://download.wireguard.com/windows-client/wireguard-amd
       - 添加一行日志到文件中：
       - PostUp = echo "$(date +%s) WireGuard Started" >> /var/log/wireguard.log
       - 调用 WebHook：
-      - PostUp = curl https://events.example.dev/wireguard/started/?key=abcdefg
+      - PostUp = curl <https://events.example.dev/wireguard/started/?key=abcdefg>
       - 添加路由：
       - PostUp = ip rule add ipproto tcp dport 22 table 1234
       - 添加 iptables 规则，启用数据包转发：
@@ -437,13 +449,13 @@ windows 客户端：<https://download.wireguard.com/windows-client/wireguard-amd
       - 添加一行日志到文件中：
       - PreDown = echo "$(date +%s) WireGuard Going Down" >> /var/log/wireguard.log
       - 调用 WebHook：
-      - PreDown = curl https://events.example.dev/wireguard/stopping/?key=abcdefg
+      - PreDown = curl <https://events.example.dev/wireguard/stopping/?key=abcdefg>
     - PostDown
       - 停止 VPN 接口之后运行的命令。这个选项可以指定多次，按顺序执行。例如：
       - 添加一行日志到文件中：
       - PostDown = echo "$(date +%s) WireGuard Going Down" >> /var/log/wireguard.log
       - 调用 WebHook：
-      - PostDown = curl https://events.example.dev/wireguard/stopping/?key=abcdefg
+      - PostDown = curl <https://events.example.dev/wireguard/stopping/?key=abcdefg>
       - 删除 iptables 规则，关闭数据包转发：
       - PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
   - [Peer]
@@ -1299,6 +1311,10 @@ docker run -ti [username]/copyserver /bin/bash
 
 ## 内网应用仪表盘
 
+### [Flare](https://github.com/soulteary/docker-flare)
+
+Lightweight, high performance and fast self-hosted navigation pages,[从零开始搭建个人书签导航应用：Flare](https://zhuanlan.zhihu.com/p/471484010)
+
 ### Heimdall
 
 [Heimdall](https://heimdall.site/) 是一款网络书签仪表盘，它内置了超过 300 款网络服务图标，以及接通了部分服务的 API，可以实现一个非常漂亮的网络书签、内网门户页面.当然它本质上还是一个书签服务，支持自定义 URL 和图标的。并且 Heimdall 支持多用户、标签分类、自带了 242 个应用信息，以及 67 个可以显示更多信息的增强型应用。
@@ -1553,6 +1569,43 @@ AList 不仅是一款开源实用的自建网盘程序，通过它你还可以�
 
 无论是作为网络影视资源库，或是文档备份的空间，它都能让你更好地利用网盘的容量，节省本地磁盘空间。从而也能省下一大笔购买 NAS 、硬盘的开支。不得不说，AList 绝对是一个非常实用的开源项目，如果你有一点动手能力，绝对值得部署一个。
 
+### 百度网盘
+
+[omv 家用 nas 搭建[3]， 百度云网盘部署](https://zhuanlan.zhihu.com/p/363608459)
+
+```sh
+docker pull johngong/baidunetdisk
+docker create  \
+    --name=baidunetdisk  \
+    -p 5800:5800  \
+    -p 5900:5900  \
+    -v /配置文件位置:/config  \
+    -v /下载位置:/config/baidunetdiskdownload  \
+    --restart unless-stopped  \
+    johngong/baidunetdisk:latest
+```
+
+docker-compose:
+
+```yml
+---
+version: "2.1"
+services:
+  baiduNetdisk:
+    image: johngong/baidunetdisk:latest
+    container_name: baiduNetdisk
+    environment:
+      - TZ=Asia/Shanghai
+      - VNC_PASSWORD=123456
+    volumes:
+      - /srv/dev-disk-by-uuid-760db5aa-db10-48eb-bc2e-06fcf98b2c8f/software/baiduNetdisk/config:/config 
+      - /srv/dev-disk-by-uuid-760db5aa-db10-48eb-bc2e-06fcf98b2c8f/pt/baidupcs/downloads:/config/baidunetdiskdownload 
+    ports:
+      - 5900:5900
+      - 6080:5800
+    restart: unless-stopped
+```
+
 ## 远程下载
 
 ### xunlei
@@ -1655,13 +1708,7 @@ sudo transmission-daemon -d
 
 - ip:9091
 
-### tget
-
-```sh
-npm install tget
-```
-
-### qbitttorrent
+### [qbitttorrent](https://github.com/qbittorrent/qBittorrent)
 
 BT下载工具，抢上传比较厉害，一般PT用得比较多
 
@@ -1695,44 +1742,68 @@ services:
     restart: unless-stopped
 ```
 
-## 网盘
+### qbittorrent-nox
 
-### 百度网盘
+qbittorrent webui版 [在 Ubuntu 服务器上安装 qBittorrent-nox](https://aimerneige.com/zh/post/linux/install-qbittorrent-nox-on-ubuntu-server/)
 
-[omv 家用 nas 搭建[3]， 百度云网盘部署](https://zhuanlan.zhihu.com/p/363608459)
+- 导入 qBittorrent-nox 稳定版本的源
+  - ```sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y```
+- 安装 qBittorrent-nox
+  - ```sudo apt install qbittorrent-nox -y```
+- 创建 service 文件
+  - ```sudo nano /etc/systemd/system/qbittorrent-nox.service```
+
+```service
+[Unit]
+Description=qBittorrent Command Line Client
+After=network.target
+
+[Service]
+Type=forking
+User=root
+
+ExecStart=/usr/bin/qbittorrent-nox -d --webui-port=8080
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+- 重载 systemctl
+  - ```sudo systemctl daemon-reload```
+- 启动 qBittorrent-nox
+  - ```sudo systemctl start qbittorrent-nox```
+- 开启开机自启动 qBittorrent-nox
+  - ```sudo systemctl enable qbittorrent-nox```
+- 检查 qBittorrent-nox 是否启动
+  - ```systemctl status qbittorrent-nox```
+- 登录到 qBittorrent-nox
+  - username:admin
+  - password:adminadmin
+- 如何删除 qBittorrent-nox
 
 ```sh
-docker pull johngong/baidunetdisk
-docker create  \
-    --name=baidunetdisk  \
-    -p 5800:5800  \
-    -p 5900:5900  \
-    -v /配置文件位置:/config  \
-    -v /下载位置:/config/baidunetdiskdownload  \
-    --restart unless-stopped  \
-    johngong/baidunetdisk:latest
+# Remove qBittorrent Stable
+sudo add-apt-repository --remove ppa:qbittorrent-team/qbittorrent-stable
+# Remove qBittorrent Unstable (Nightly)
+sudo add-apt-repository --remove ppa:qbittorrent-team/qbittorrent-unstable -y
+# Remove qBittorrent
+sudo apt autoremove qbittorrent-nox
 ```
 
-docker-compose:
-
-```yml
----
-version: "2.1"
-services:
-  baiduNetdisk:
-    image: johngong/baidunetdisk:latest
-    container_name: baiduNetdisk
-    environment:
-      - TZ=Asia/Shanghai
-      - VNC_PASSWORD=123456
-    volumes:
-      - /srv/dev-disk-by-uuid-760db5aa-db10-48eb-bc2e-06fcf98b2c8f/software/baiduNetdisk/config:/config 
-      - /srv/dev-disk-by-uuid-760db5aa-db10-48eb-bc2e-06fcf98b2c8f/pt/baidupcs/downloads:/config/baidunetdiskdownload 
-    ports:
-      - 5900:5900 
-      - 6080:5800 
-    restart: unless-stopped
-```
+- WebUI HTTPS configuration
+  - Linux WebUI setting up HTTPS with self signed SSL certificates
+    - Create neccesary folders:
+      - ```mkdir ~/.config/qBittorrent/ssl```
+      - ```cd ~/.config/qBittorrent/ssl```
+    - Now we generate the key and certificate pair:
+      - ```openssl req -new -x509 -nodes -out server.crt -keyout server.key```
+    - You should now have two files in your ssl folder:server.crt  server.key
+    - Tools -> Options... -> WebUI
+    - Enable HTTPS and optionally change the port to your liking. Then, according to your version:
+      - 4.2.0 and newer: copy the path of the key and certificate files into the respective fields of the WebUI (for example, /home/qbtuser/.config/qBittorrent/ssl/server.key and /home/qbtuser/.config/qBittorrent/ssl/server.crt)
+      - older versions: copy and paste the key and certificate's contents into the respective fields of the webui. You can use cat in your terminal to view the contents of the files: cat server.key
+      - Copy the contents of the entire file (including -----BEGIN PRIVATE KEY----- and -----END PRIVATE KEY-----) into the 'key' field of the WebUI and proceed to do the same with the certificate by issuing: cat server.crt
 
 ## 播放服务
 
@@ -1812,5 +1883,16 @@ services:
 ```
 
 ## 开发环境
+
+### 版本控制
+
+#### [gitea](https://about.gitea.com/)
+
+Private, Fast, Reliable DevOps Platform
+
+[文档](https://docs.gitea.com/zh-cn/)
+
+- 准备工作
+- [下载](https://dl.gitea.com/)
 
 ### gcc
