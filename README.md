@@ -576,7 +576,7 @@ sudo apt-get check #-------检查是否有损坏的依赖
 ## 有趣改造和扩展应用
 
 - [有哪些对树莓派的有趣改造和扩展应用](https://www.zhihu.com/question/20697024)
-- [NAS](https://github.com/yaoqs/Raspberry-config/tree/master/NAS)
+- **[NAS](https://yaoqs.github.io/NAS)**
 - 智能设备
 
 ## References
