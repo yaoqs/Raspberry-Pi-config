@@ -7,47 +7,46 @@ About the skills and toolkits of installing, configuring raspbian and handbook f
 
 <!-- TOC -->
 
-- [Raspberry-config](#raspberry-config)
-  - [开箱](#开箱)
-  - [Install](#install)
-  - [update](#update)
-    - [固件更新](#固件更新)
-      - [还原到稳定版本的方法](#还原到稳定版本的方法)
-    - [EEPROM Boot Loader更新](#eeprom-boot-loader更新)
-    - [内核编译](#内核编译)
-  - [boot](#boot)
-    - [参见boot目录下README.md](#参见boot目录下readmemd)
-    - [u盘启动](#u盘启动)
-  - [os/操作系统](#os操作系统)
-    - [安装respbian.docx](#安装respbiandocx)
-    - [kali in raspberry pi](#kali-in-raspberry-pi)
-    - [Raspbian 操作系统](#raspbian-操作系统)
-    - [raspberrypi/linux](#raspberrypilinux)
-    - [Windows 10 IoT 系统](#windows-10-iot-系统)
-  - [设置](#设置)
-  - [树莓派 GPIO 控制](#树莓派-gpio-控制)
-  - [Raspberry Pi Connect:树莓派远程桌面解决方案](#raspberry-pi-connect树莓派远程桌面解决方案)
-  - [toolkit](#toolkit)
-    - [\[树莓派通过网线直连笔记本电脑共享上网 .docx\](./树莓派通过网线直连笔记本电脑共享上网 .docx)](#树莓派通过网线直连笔记本电脑共享上网-docx树莓派通过网线直连笔记本电脑共享上网-docx)
-  - [树莓派常用命令集合](#树莓派常用命令集合)
-  - [Tutorial list](#tutorial-list)
-  - [硬件](#硬件)
-  - [集群/cluster](#集群cluster)
-  - [软件](#软件)
-    - [Python](#python)
-  - [服务器管理](#服务器管理)
-  - [有趣改造和扩展应用](#有趣改造和扩展应用)
-  - [References](#references)
-  - [Recommendation](#recommendation)
-  - [News](#news)
-    - [树莓派 5 评测：Maker 们的新宠](#树莓派-5-评测maker-们的新宠)
-    - [树莓派 5 发布，新特性细节公布](#树莓派-5-发布新特性细节公布)
-    - [树莓派 4 代](#树莓派-4-代)
-    - [树莓派 4 代发布](#树莓派-4-代发布)
-    - [树莓派 4 硬件配置](#树莓派-4-硬件配置)
-    - [树莓派官方宣传片](#树莓派官方宣传片)
-    - [树莓派有什么作用和用途？](#树莓派有什么作用和用途)
-  - [License 许可证 \& Copyright](#license-许可证--copyright)
+1. [开箱](#开箱)
+2. [Install](#install)
+3. [update](#update)
+   1. [固件更新](#固件更新)
+      1. [还原到稳定版本的方法](#还原到稳定版本的方法)
+   2. [EEPROM Boot Loader更新](#eeprom-boot-loader更新)
+   3. [内核编译](#内核编译)
+4. [boot](#boot)
+   1. [参见boot目录下README.md](#参见boot目录下readmemd)
+   2. [u盘启动](#u盘启动)
+5. [os/操作系统](#os操作系统)
+   1. [安装respbian.docx](#安装respbiandocx)
+   2. [kali in raspberry pi](#kali-in-raspberry-pi)
+   3. [Raspbian 操作系统](#raspbian-操作系统)
+   4. [raspberrypi/linux](#raspberrypilinux)
+   5. [Windows 10 IoT 系统](#windows-10-iot-系统)
+6. [设置](#设置)
+7. [树莓派 GPIO 控制](#树莓派-gpio-控制)
+8. [Raspberry Pi Connect:树莓派远程桌面解决方案](#raspberry-pi-connect树莓派远程桌面解决方案)
+9. [toolkit](#toolkit)
+   1. [\[树莓派通过网线直连笔记本电脑共享上网 .docx\](./树莓派通过网线直连笔记本电脑共享上网 .docx)](#树莓派通过网线直连笔记本电脑共享上网-docx树莓派通过网线直连笔记本电脑共享上网-docx)
+10. [树莓派常用命令集合](#树莓派常用命令集合)
+11. [Tutorial list](#tutorial-list)
+12. [硬件](#硬件)
+13. [集群/cluster](#集群cluster)
+14. [软件](#软件)
+    1. [Python](#python)
+15. [服务器管理](#服务器管理)
+16. [有趣改造和扩展应用](#有趣改造和扩展应用)
+17. [References](#references)
+18. [Recommendation](#recommendation)
+19. [News](#news)
+    1. [树莓派 5 评测：Maker 们的新宠](#树莓派-5-评测maker-们的新宠)
+    2. [树莓派 5 发布，新特性细节公布](#树莓派-5-发布新特性细节公布)
+    3. [树莓派 4 代](#树莓派-4-代)
+    4. [树莓派 4 代发布](#树莓派-4-代发布)
+    5. [树莓派 4 硬件配置](#树莓派-4-硬件配置)
+    6. [树莓派官方宣传片](#树莓派官方宣传片)
+    7. [树莓派有什么作用和用途？](#树莓派有什么作用和用途)
+20. [License 许可证 \& Copyright](#license-许可证--copyright)
 
 <!-- /TOC -->
 
@@ -445,31 +444,31 @@ location ~ .php$ {
 ```
 
 ```sh
-#安装软件 
+#安装软件
 apt-get install softname1 softname2 softname3……
-#卸载软件 
+#卸载软件
 apt-get remove softname1 softname2 softname3……
-#卸载并清除配置 
+#卸载并清除配置
 apt-get remove –purge softname1
-#更新软件信息数据库 
+#更新软件信息数据库
 apt-get update
-#进行系统升级 
+#进行系统升级
 apt-get upgrade
-#搜索软件包 
+#搜索软件包
 apt-cache search softname1 softname2 softname3……
-#安装deb软件包 
+#安装deb软件包
 dpkg -i xxx.deb
-#删除软件包 
+#删除软件包
 dpkg -r xxx.deb
-#连同配置文件一起删除 
+#连同配置文件一起删除
 dpkg -r –purge xxx.deb
-#查看软件包信息 
+#查看软件包信息
 dpkg -info xxx.deb
-#查看文件拷贝详情 
+#查看文件拷贝详情
 dpkg -L xxx.deb
 #查看系统中已安装软件包信息
 dpkg -l
-#重新配置软件包 
+#重新配置软件包
 dpkg-reconfigure xxx
 
 #清除所有已删除包的残馀配置文件
